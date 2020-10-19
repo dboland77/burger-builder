@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import styles from "./BurgerIngredient.module.css";
 import PropTypes from "prop-types";
-import BurgerBuilder from '../../../containers/BurgerBuilder/BurgerBuilder';
 
 class BurgerIngredient extends Component {
+      state = {
+            
+      }
   render(){
     let ingredient = null;
     switch (this.props.type){
