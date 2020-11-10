@@ -10,11 +10,10 @@ const SideDrawer = (props) => {
   if (props.open) {
     attachedStyles = [styles.SideDrawer, styles.Open];
   }
-  
   return (
     <Fragment>
       <Backdrop show={props.open} clicked={props.closed} />
-      <div className={attachedStyles.join('')}>
+      <div className={attachedStyles.join(' ')}>
         <div className={styles.Logo}>
           <Logo />
         </div>
