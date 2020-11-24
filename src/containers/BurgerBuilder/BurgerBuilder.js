@@ -21,7 +21,7 @@ class BurgerBuilder extends Component {
     purchasable: false,
     purchasing: false,
     loading: false,
-    error: false
+    error: false,
   };
 
   //Note that we have to add .json to the end of the firebase URL
@@ -31,7 +31,9 @@ class BurgerBuilder extends Component {
       .then((response) => {
         this.setState({ ingredients: response.data });
       })
-      .catch(error=>{this.setState({error:true})})
+      .catch((error) => {
+        this.setState({ error: true });
+      });
   }
 
   updatePurchaseState = (ingredients) => {
@@ -91,26 +93,43 @@ class BurgerBuilder extends Component {
   // than the class)
   purchaseContinueHandler = () => {
     //alert("You continue!");
-    this.setState({ loading: true });
+    // this.setState({ loading: true });
 
-    const order = {
-      ingredients: this.state.ingredients,
-      price: this.state.totalPrice,
-      customer: {
-        name: "Dave Boland",
-        address: {
-          street: "My street",
-          postcode: "PO12345",
-          country: "United Kingdom",
-        },
-        email: "test@test.com",
-      },
-      deliveryMethod: "fastest",
-    };
-    axios
-      .post("/orders", order)
-      .then((response) => this.setState({ loading: false, purchasing: false }))
-      .catch((error) => this.setState({ loading: false, purchasing: false }));
+    // const order = {
+    //   ingredients: this.state.ingredients,
+    //   price: this.state.totalPrice,
+    //   customer: {
+    //     name: "Dave Boland",
+    //     address: {
+    //       street: "My street",
+    //       postcode: "PO12345",
+    //       country: "United Kingdom",
+    //     },
+    //     email: "test@test.com",
+    //   },
+    //   deliveryMethod: "fastest",
+    // };
+    // axios
+    //   .post("/orders", order)
+    //   .then((response) => this.setState({ loading: false, purchasing: false }))
+    //   .catch((error) => this.setState({ loading: false, purchasing: false }));
+    const queryParams = [];
+
+    for (let i in this.state.ingredients) {
+      queryParams.push(
+        encodeURIComponent(i) +
+          "=" +
+          encodeURIComponent(this.state.ingredients[i])
+      );
+    }
+
+    const queryString = queryParams.join('&');
+    console.log(queryString);
+    
+    this.props.history.push({
+      pathname: "/checkout",
+      search: "?" + queryString
+    });
   };
 
   render() {
@@ -122,8 +141,12 @@ class BurgerBuilder extends Component {
     }
 
     let orderSummary = null;
-    let burger = this.state.error? <p>Ingredients can't be loaded</p>:<Spinner />;
-    
+    let burger = this.state.error ? (
+      <p>Ingredients can't be loaded</p>
+    ) : (
+      <Spinner />
+    );
+
     if (this.state.ingredients) {
       burger = (
         <Fragment>
@@ -147,7 +170,7 @@ class BurgerBuilder extends Component {
         />
       );
     }
-    
+
     if (this.state.loading) {
       orderSummary = <Spinner />;
     }
