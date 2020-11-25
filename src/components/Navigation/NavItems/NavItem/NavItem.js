@@ -5,7 +5,11 @@ import { NavLink } from "react-router-dom";
 const NavItem = (props) => {
   return (
     <li className={styles.NavItem}>
-      <NavLink to={props.link} exact activeClassName={styles.active}>
+      <NavLink
+        to={props.link}
+        exact={props.exact}
+        activeClassName={styles.active}
+      >
         {props.children}
       </NavLink>
     </li>
